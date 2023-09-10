@@ -24,7 +24,7 @@ class FixedBuffer : noncopyable {
 
     const char* data() const {return data_;}
     int length() const {return static_cast<int>(cur_ - data_);}
-    char current() {return cur_;}
+    char* current() {return cur_;}
     int avail() const {return static_cast<int>(end() - cur_);}
     void add(size_t len) {cur_ = data_;}
 

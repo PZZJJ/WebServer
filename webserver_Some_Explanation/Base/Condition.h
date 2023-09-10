@@ -17,15 +17,15 @@ class Condition : noncopyable {
     }
 
     void wait() {
-        pthread_cond_signal(&cond);
+        pthread_cond_wait(&cond, mutex.get());
     }
 
     void notify() {
-        pthread_cond_broadcast(&cond);
+        pthread_cond_signal(&cond);      // 更可靠的唤醒一个线程
     }
 
     void notifyAll(){
-        pthread_cond_broadcast(&cond);
+        pthread_cond_broadcast(&cond);   // 更可靠的唤醒多个线程
     }
 
     bool waitForSeconds (int seconds) {
@@ -38,5 +38,4 @@ class Condition : noncopyable {
     private:
     MutexLock &mutex;
     pthread_cond_t cond;
-
 };

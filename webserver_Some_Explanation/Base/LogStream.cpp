@@ -12,15 +12,15 @@ const char* zero = digits+9;
 
 //From muduo
 template <typename T>
-size_t convert(char buf[], T value)
-{
+size_t convert(char buf[], T value)   // 将value转化为字符串并返回长度
+{                                     // char buf[] 会退化为char*,  等于传入一个首地址
     T i = value;
     char *p = buf;
 
     do{
         int lsd = static_cast<int>(i%10);
         i /= 10;
-        -p++ = zero[lsd];
+        *p++ = zero[lsd];
     }while (i != 0);
 
     if (value < 0)
@@ -72,6 +72,64 @@ LogStream& LogStream::operator<<(unsigned int v)
     formatInteger(v);
     return *this;
 }
+
+LogStream& LogStream::operator<<(long v)
+{
+    formatInteger(v);
+    return *this;
+}
+
+LogStream& LogStream::operator<<(unsigned long v)
+{
+    formatInteger(v);
+    return *this;
+}
+
+LogStream& LogStream::operator<<(long long v)
+{
+    formatInteger(v);
+    return *this;
+}
+
+LogStream& LogStream::operator<<(unsigned long long v)
+{
+    formatInteger(v);
+    return *this;
+}
+
+LogStream& LogStream::operator<<(double v)
+{
+    if (buffer_.avail() >= kMaxNumericSize)
+    {
+        int len = snprintf(buffer_.current(), kMaxNumericSize, "%.12g", v);
+        buffer_.add(len);
+    }
+    return *this;
+}
+
+LogStream& LogStream::operator<<(long double v)
+{
+    if (buffer_.avail() >= kMaxNumericSize) 
+    {
+        int len = snprintf(buffer_.current(), kMaxNumericSize, "%.12Lg", v);
+        buffer_.add(len);
+    }
+  return *this;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
